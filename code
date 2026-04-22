@@ -1,0 +1,68 @@
+import java.util.*;
+
+public class RecommendationSystem {
+
+    static Map<String, Map<String, Integer>> data = new HashMap<>();
+
+    public static void main(String[] args) {
+
+        // Sample Data (Improved)
+        addUser("A", Map.of("Movie1", 5, "Movie2", 3, "Movie4", 1));
+        addUser("B", Map.of("Movie1", 4, "Movie3", 5, "Movie4", 1));
+        addUser("C", Map.of("Movie1", 1, "Movie2", 1, "Movie3", 4, "Movie4", 5));
+
+        recommend("A");
+    }
+
+    static void addUser(String user, Map<String, Integer> ratings) {
+        data.put(user, ratings);
+    }
+
+    static void recommend(String user) {
+
+        Map<String, Integer> userRatings = data.get(user);
+
+        if (userRatings == null) {
+            System.out.println("User not found!");
+            return;
+        }
+
+        Map<String, Integer> recommendations = new HashMap<>();
+
+        // Compare with other users
+        for (String other : data.keySet()) {
+
+            if (other.equals(user)) continue;
+
+            Map<String, Integer> otherRatings = data.get(other);
+
+            for (String item : otherRatings.keySet()) {
+
+                // Recommend only unseen items
+                if (!userRatings.containsKey(item)) {
+                    recommendations.put(
+                        item,
+                        recommendations.getOrDefault(item, 0) + otherRatings.get(item)
+                    );
+                }
+            }
+        }
+
+        // Sort recommendations by score (descending)
+        List<Map.Entry<String, Integer>> sortedList =
+                new ArrayList<>(recommendations.entrySet());
+
+        sortedList.sort((a, b) -> b.getValue() - a.getValue());
+
+        // Print result
+        System.out.println("Recommended items for " + user + ":");
+
+        if (sortedList.isEmpty()) {
+            System.out.println("No recommendations available.");
+        } else {
+            for (Map.Entry<String, Integer> entry : sortedList) {
+                System.out.println(entry.getKey() + " (score: " + entry.getValue() + ")");
+            }
+        }
+    }
+}
