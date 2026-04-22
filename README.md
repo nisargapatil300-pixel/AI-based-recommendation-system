@@ -107,7 +107,7 @@ Using libraries like Apache Mahout
 
 This project provides a basic understanding of how recommendation systems work. By using collaborative filtering, the system can suggest relevant items to users based on shared preferences. Although simple, it forms the foundation for more advanced AI-based recommendation engines used in real-world applications.
 
-output:
-task4.png
+## Output:
+![Output](task4.png)
 
 
